@@ -8,6 +8,8 @@ import numpy as np
 from pyMCDS import pyMCDS
 from fury import window, actor, ui
 import itertools
+import vtk
+
 
 mcds1 = pyMCDS('final.xml', '.')
 
@@ -75,7 +77,35 @@ radii = np.concatenate((C_radii,N_radii),axis=0)
 # %%
 
 
+def plane_source2(scale=50):
+    my_vertices = np.array([[0,0,0],[1,1,0],[0,1,0],[1,0,0]])
+    my_vertices = my_vertices * scale
+    surface=actor.surface(my_vertices)
+    return surface
 
+def plane_source(position=[0,0,0],normal=[1.0,0,1.0]):
+    plane = vtk.vtkPlaneSource()
+    plane.SetCenter(position)
+    plane.SetNormal(normal)
+#    plane.SetOrigin([0,0,0])
+    plane.SetPoint1([-10,0,0])
+    plane.SetPoint2([10,0,0])
+    planeMapper=vtk.vtkPolyDataMapper()
+    planeMapper.SetInputConnection(plane.GetOutputPort())
+    planeActor = vtk.vtkActor()
+    planeActor.SetMapper(planeMapper)
+    return planeActor
+
+
+def clipper(inp,clip):
+    clipper = vtk.vtkClipPolyData()
+    clipper.SetInputConnection(inp)
+    clipper.SetClipFunction(clip)
+    planeMapper=vtk.vtkPolyDataMapper()
+    planeMapper.SetInputConnection(clipper.GetOutputPort())
+    planeActor = vtk.vtkActor()
+    planeActor.SetMapper(planeMapper)
+    return planeActor
 
 
 scene = window.Scene()
@@ -87,7 +117,14 @@ sphere_actor = actor.sphere(centers=xyz,
                             colors=colors,
                             radii=radii)
 
-scene.add(sphere_actor)
+#plane_actor = plane_source()
+plane_actor=plane_source()
+#sphere_actor.SetClippingPlanes(plane_actor.GetMapper().GetOutputPort())
+# clip_actor=clipper(sphere_actor.GetMapper().GetInput(),
+#                   plane_actor.GetMapper().GetInput())
+#scene.add(clip_actor)
+scene.add(plane_actor)
+#scene.add(sphere_actor)
 scene.add(actor.axes())
 
 showm = window.ShowManager(scene,
