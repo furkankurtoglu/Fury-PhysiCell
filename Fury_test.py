@@ -11,7 +11,7 @@ import itertools
 import vtk
 
 
-mcds1 = pyMCDS('final.xml', '.')
+mcds1 = pyMCDS('final.xml', '.',load_microenv=False)
 
 Types = np.array([mcds1.data['discrete_cells']['cell_type']])
 Fibro = np.where(Types == 2)
@@ -118,9 +118,7 @@ sphere_actor = actor.sphere(centers=xyz,
 
 
 plane_actor=plane_source()
-sphere_actor.SetClippingPlanes(plane_actor.GetMapper().GetOutputPort())
-#clip_actor=clipper(sphere_actor.GetMapper().vtkAlgorithmOutput(),plane_actor.GetMapper().GetInput())
-
+#sphere_actor.GetMapper().SetClippingPlanes(plane_actor.GetMapper().GetOutputPort())
 scene = window.Scene()
 
 scene.set_camera(position=(-146.17, 982.29, -3440.16), focal_point=(0, 0, 0),
@@ -131,7 +129,7 @@ scene.add(sphere_actor)
 scene.add(actor.axes())
 
 showm = window.ShowManager(scene,
-                           size=(1500, 1500), reset_camera=False,
+                           size=(1080, 720), reset_camera=True,
                            order_transparent=True)
 
 showm.initialize()
@@ -149,7 +147,7 @@ def timer_callback(_obj, _event):
     #showm.scene.azimuth(0.05 * cnt)
     #sphere_actor.GetProperty().SetOpacity(cnt/100.)
     showm.render()
-    scene.camera_info()
+    #scene.camera_info()
     if cnt == maxcnt:
         showm.exit()
 
