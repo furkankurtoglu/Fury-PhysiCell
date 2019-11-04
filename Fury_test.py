@@ -83,13 +83,15 @@ def plane_source2(scale=50):
     surface=actor.surface(my_vertices)
     return surface
 
-def plane_source(position=[0,0,0],normal=[1.0,0,1.0]):
+def plane_source(position=[0.0,0.0,0.0],normal=[0.0,0.0,0.0]):
     plane = vtk.vtkPlaneSource()
     plane.SetCenter(position)
     plane.SetNormal(normal)
-#    plane.SetOrigin([0,0,0])
-    plane.SetPoint1([-10,0,0])
-    plane.SetPoint2([10,0,0])
+    x_origin = -1000.0
+    y_origin = -1000.0
+    plane.SetOrigin(x_origin,y_origin,0.0)
+    plane.SetPoint1(1000.0, y_origin, 0.0 )
+    plane.SetPoint2(x_origin,1000.0, 0.0 )
     planeMapper=vtk.vtkPolyDataMapper()
     planeMapper.SetInputConnection(plane.GetOutputPort())
     planeActor = vtk.vtkActor()
@@ -108,23 +110,24 @@ def clipper(inp,clip):
     return planeActor
 
 
-scene = window.Scene()
 
-scene.set_camera(position=(-146.17, 982.29, -3440.16), focal_point=(0, 0, 0),
-                 view_up=(0.03, 0.96, 0.27))
 
 sphere_actor = actor.sphere(centers=xyz,
                             colors=colors,
                             radii=radii)
 
-#plane_actor = plane_source()
+
 plane_actor=plane_source()
-#sphere_actor.SetClippingPlanes(plane_actor.GetMapper().GetOutputPort())
-# clip_actor=clipper(sphere_actor.GetMapper().GetInput(),
-#                   plane_actor.GetMapper().GetInput())
-#scene.add(clip_actor)
+sphere_actor.SetClippingPlanes(plane_actor.GetMapper().GetOutputPort())
+#clip_actor=clipper(sphere_actor.GetMapper().vtkAlgorithmOutput(),plane_actor.GetMapper().GetInput())
+
+scene = window.Scene()
+
+scene.set_camera(position=(-146.17, 982.29, -3440.16), focal_point=(0, 0, 0),
+                 view_up=(0.03, 0.96, 0.27))
+
 scene.add(plane_actor)
-#scene.add(sphere_actor)
+scene.add(sphere_actor)
 scene.add(actor.axes())
 
 showm = window.ShowManager(scene,
