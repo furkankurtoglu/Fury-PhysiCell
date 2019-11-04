@@ -126,7 +126,7 @@ scene = window.Scene()
 scene.set_camera(position=(-146.17, 982.29, -3440.16), focal_point=(0, 0, 0),
                  view_up=(0.03, 0.96, 0.27))
 
-scene.add(plane_actor)
+#scene.add(plane_actor)
 scene.add(sphere_actor)
 scene.add(actor.axes())
 
