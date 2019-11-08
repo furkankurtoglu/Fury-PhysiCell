@@ -9,9 +9,21 @@ from pyMCDS import pyMCDS
 from fury import window, actor, ui
 import itertools
 import vtk
+import glob
+
+#%% Parsin Time-Series Data
+
+#mcdslist=[]
+#for fin in glob.glob("output*.xml"):
+#    mcdslist.append(pyMCDS(fin, load_microenv=False))
 
 
-mcds1 = pyMCDS('final.xml', '.',load_microenv=False)
+#DF=mcdslist[0].get_cell_df()
+
+    
+#%% Gathering Data for only one-time step
+mcds1 = pyMCDS('initial.xml',load_microenv=False)
+Df= mcds1.get_cell_df()
 
 Types = np.array([mcds1.data['discrete_cells']['cell_type']])
 Fibro = np.where(Types == 2)
@@ -66,16 +78,17 @@ N_O = np.array([np.ones(len(N_radii))]).transpose()*0.9
 N_colors = np.concatenate((N_R,N_G,N_B,N_O),axis=1)
 
 
-
-
 # Concatenations
 xyz = np.concatenate((C_xyz,N_xyz),axis=0)
 colors = np.concatenate((C_colors,N_colors),axis=0)
 radii = np.concatenate((C_radii,N_radii),axis=0)
 
+# Creating Sphere Actor for one time-point
+sphere_actor = actor.sphere(centers=xyz,
+                            colors=colors,
+                            radii=radii)
 
-# %%
-
+# %% Clipping
 
 def plane_source2(scale=50):
     my_vertices = np.array([[0,0,0],[1,1,0],[0,1,0],[1,0,0]])
@@ -112,11 +125,6 @@ def clipper(inp,clip):
 
 
 
-sphere_actor = actor.sphere(centers=xyz,
-                            colors=colors,
-                            radii=radii)
-
-
 plane_actor=plane_source()
 #sphere_actor.GetMapper().SetClippingPlanes(plane_actor.GetMapper().GetOutputPort())
 scene = window.Scene()
@@ -126,7 +134,7 @@ scene.set_camera(position=(-146.17, 982.29, -3440.16), focal_point=(0, 0, 0),
 
 #scene.add(plane_actor)
 scene.add(sphere_actor)
-scene.add(actor.axes())
+#scene.add(actor.axes())
 
 showm = window.ShowManager(scene,
                            size=(1080, 720), reset_camera=True,
@@ -140,12 +148,20 @@ tb = ui.TextBlock2D(bold=True)
 counter = itertools.count()
 
 
+
+#%% Drawing Axis
+#lines = [np.array([[-500.,-800.,-500.],[500.,-800.,-500.],[500.,800.,-500.],[-500.,800.,-500.],[-500.,-800.,-500.],[-500.,-800.,500.],[-500.,800.,500.],[-500.,800.,-500.],[-500.,800.,500.],[500.,800.,500.],[500.,-800.,500.],[500.,-800.,-500.],[500.,800.,-500.]])]
+#lines = [np.random.rand(10, 3), np.random.rand(20, 3)]
+#colors = np.random.rand(1,3)
+#c = actor.line(lines, colors)
+#scene.add(c)
+
+
 def timer_callback(_obj, _event):
     cnt = next(counter)
     maxcnt = 400
     tb.message = "Let's count up to "+ str(maxcnt) + " and exit :" + str(cnt)
     #showm.scene.azimuth(0.05 * cnt)
-    #sphere_actor.GetProperty().SetOpacity(cnt/100.)
     showm.render()
     #scene.camera_info()
     if cnt == maxcnt:
