@@ -218,24 +218,41 @@ z_label = actor.text_3d(text='z axis (micron)',position=(600,-900,0),font_size=5
 scene.add(z_label)
 
 
-def timer_callback(_obj, _event):
-    cnt = next(counter)
-    maxcnt = 600
-    tb.message = "Time Point : " + str(Timepoint)+ " hrs"
-    scene.add(tb)
-    sphere_actor=create_sphere_actor(output_list[Timepoint])
-    scene.add(sphere_actor)
-    scene.camera_info()
-    showm.render()
-    if cnt == maxcnt:
-        showm.exit()
-
 
 line_slider = ui.LineSlider2D(center=(200, 250), initial_value=1,
                               min_value=0, max_value=37,text_template="{value:.0f}")
 
 line_slider.on_change = line_slider_value
 showm.scene.add(line_slider)
+
+
+
+def timer_callback(_obj, _event):
+    cnt = next(counter)
+    maxcnt = 600
+    current_Timepoint = Timepoint
+    tb.message = "Time Point : " + str(Timepoint)+ " hrs"
+    scene.add(tb)
+    scene.add(Sphere_Actor_List[Timepoint])
+    #scene.camera_info()
+    showm.render()
+    if (current_Timepoint != Timepoint):
+        window.rm_all(scene)
+        scene.add(tb)
+        scene.add(Sphere_Actor_List[Timepoint])
+        x_label = actor.text_3d(text='x axis (micron)',position=(-100,-900,550),font_size=50,justification='left')
+        scene.add(x_label)
+        y_label = actor.text_3d(text='y axis (micron)',position=(-900,0,550),font_size=50,justification='left')
+        scene.add(y_label)
+        z_label = actor.text_3d(text='z axis (micron)',position=(600,-900,0),font_size=50,justification='left')
+        scene.add(z_label)
+        current_Timepoint = Timepoint
+        showm.scene.add(line_slider)
+        print('Slider Changed')
+    if cnt == maxcnt:
+        showm.exit()
+
+
 
 # Run every 200 milliseconds
 showm.add_timer_callback(True, 200, timer_callback)
