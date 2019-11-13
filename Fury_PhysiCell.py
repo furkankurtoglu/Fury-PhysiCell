@@ -69,12 +69,16 @@ def create_sphere_actor(xml):
 
 output_list = glob.glob("output*.xml")  
 
+Sphere_Actor_List =[]
+for xml in output_list:
+    sphere_actor = create_sphere_actor(xml)
+    Sphere_Actor_List.append(sphere_actor)
+
 def line_slider_value(slider):
     global Timepoint
     Timepoint=int(np.round(slider.value))
     return Timepoint
 
-line_slider.on_change = line_slider_value
 #%% Gathering Data for only one-time step
 #mcds1 = pyMCDS('final.xml',load_microenv=False)
 #Df= mcds1.get_cell_df()
@@ -215,7 +219,6 @@ scene.add(z_label)
 
 
 def timer_callback(_obj, _event):
-    
     cnt = next(counter)
     maxcnt = 600
     tb.message = "Time Point : " + str(Timepoint)+ " hrs"
@@ -228,7 +231,7 @@ def timer_callback(_obj, _event):
         showm.exit()
 
 
-line_slider = ui.LineSlider2D(center=(500, 250), initial_value=0,
+line_slider = ui.LineSlider2D(center=(200, 250), initial_value=1,
                               min_value=0, max_value=37,text_template="{value:.0f}")
 
 line_slider.on_change = line_slider_value
