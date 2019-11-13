@@ -264,13 +264,12 @@ show_m.initialize()
 # Finally, please set the following variable to ``True`` to interact with the
 # datasets in 3D.
 
-interactive = True
+interactive = True()
 
 scene.zoom(1.5)
 scene.reset_clipping_range()
 
 if interactive:
-
     show_m.add_window_callback(win_callback)
     show_m.render()
     show_m.start()

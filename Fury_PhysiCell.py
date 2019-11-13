@@ -70,9 +70,11 @@ def create_sphere_actor(xml):
 output_list = glob.glob("output*.xml")  
 
 def line_slider_value(slider):
+    global Timepoint
     Timepoint=int(np.round(slider.value))
+    return Timepoint
 
-
+line_slider.on_change = line_slider_value
 #%% Gathering Data for only one-time step
 #mcds1 = pyMCDS('final.xml',load_microenv=False)
 #Df= mcds1.get_cell_df()
@@ -213,10 +215,13 @@ scene.add(z_label)
 
 
 def timer_callback(_obj, _event):
+    
     cnt = next(counter)
-    maxcnt = 200
-    tb.message = "Time Point : " + str(cnt) + " hrs"
+    maxcnt = 600
+    tb.message = "Time Point : " + str(Timepoint)+ " hrs"
     scene.add(tb)
+    sphere_actor=create_sphere_actor(output_list[Timepoint])
+    scene.add(sphere_actor)
     scene.camera_info()
     showm.render()
     if cnt == maxcnt:
