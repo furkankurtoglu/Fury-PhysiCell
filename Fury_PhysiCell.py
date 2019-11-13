@@ -238,7 +238,6 @@ def timer_callback(_obj, _event):
     showm.render()
     if (current_Timepoint != Timepoint):
         window.rm_all(scene)
-        scene.add(tb)
         scene.add(Sphere_Actor_List[Timepoint])
         x_label = actor.text_3d(text='x axis (micron)',position=(-100,-900,550),font_size=50,justification='left')
         scene.add(x_label)
@@ -249,6 +248,7 @@ def timer_callback(_obj, _event):
         current_Timepoint = Timepoint
         showm.scene.add(line_slider)
         print('Slider Changed')
+        scene.add(tb)
     if cnt == maxcnt:
         showm.exit()
 
