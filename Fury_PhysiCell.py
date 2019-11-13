@@ -14,11 +14,10 @@ import glob
 import time
 
 #%% Parsing Time-Series Data
-t= time.time()
 
-SphereActor_list=[]
-for fin in glob.glob("output*.xml"):
-    mcds=pyMCDS(fin, load_microenv=False)
+
+def create_sphere_actor(xml):
+    mcds=pyMCDS(xml, load_microenv=False)
     data=mcds.get_cell_df()
     Types = np.array([mcds.data['discrete_cells']['cell_type']])
     Fibro = np.where(Types == 2)
@@ -65,13 +64,17 @@ for fin in glob.glob("output*.xml"):
     radii = np.concatenate((C_radii,N_radii),axis=0)
     # Creating Sphere Actor for one time-point
     sphere_actor = actor.sphere(centers=xyz,colors=colors,radii=radii)
-    SphereActor_list.append(sphere_actor)
-    
-elapsed = time.time() - t
+    return sphere_actor
 
-print (elapsed)
+
+output_list = glob.glob("output*.xml")  
+
+def line_slider_value(slider):
+    Timepoint=int(np.round(slider.value))
+
+
 #%% Gathering Data for only one-time step
-mcds1 = pyMCDS('final.xml',load_microenv=False)
+#mcds1 = pyMCDS('final.xml',load_microenv=False)
 #Df= mcds1.get_cell_df()
 #
 #Types = np.array([mcds1.data['discrete_cells']['cell_type']])
@@ -79,11 +82,11 @@ mcds1 = pyMCDS('final.xml',load_microenv=False)
 #Organoid = np.where(Types == 1)
 #
 ## Total Cell
-C_xpos1 = np.array([mcds1.data['discrete_cells']['position_x']])
-C_ypos1 = np.array([mcds1.data['discrete_cells']['position_y']])
-C_zpos1 = np.array([mcds1.data['discrete_cells']['position_z']])
-C_xyz1 = np.concatenate((C_xpos1,C_ypos1,C_zpos1),axis=0)
-C_xyz1=C_xyz1.transpose()
+#C_xpos1 = np.array([mcds1.data['discrete_cells']['position_x']])
+#C_ypos1 = np.array([mcds1.data['discrete_cells']['position_y']])
+#C_zpos1 = np.array([mcds1.data['discrete_cells']['position_z']])
+#C_xyz1 = np.concatenate((C_xpos1,C_ypos1,C_zpos1),axis=0)
+#C_xyz1=C_xyz1.transpose()
 #
 ## Cell Radius Calculation
 #C_volume = np.array([mcds1.data['discrete_cells']['total_volume']])
@@ -180,7 +183,6 @@ scene = window.Scene()
 scene.set_camera(position=(71.47, 19.45, 3469.03), focal_point=(6.70, -22.29, -18.06),
                  view_up=(0.00, 1.00, -0.01))
 
-scene.add(SphereActor_list[0])
 #scene.add(plane_actor)
 #scene.add(actor.axes())
 #
@@ -202,38 +204,30 @@ colors = np.random.rand(1,3)
 c = actor.line(lines, colors)
 scene.add(c)
 
+x_label = actor.text_3d(text='x axis (micron)',position=(-100,-900,550),font_size=50,justification='left')
+scene.add(x_label)
+y_label = actor.text_3d(text='y axis (micron)',position=(-900,0,550),font_size=50,justification='left')
+scene.add(y_label)
+z_label = actor.text_3d(text='z axis (micron)',position=(600,-900,0),font_size=50,justification='left')
+scene.add(z_label)
+
 
 def timer_callback(_obj, _event):
-    global SphereActor_list
     cnt = next(counter)
     maxcnt = 200
     tb.message = "Time Point : " + str(cnt) + " hrs"
-    #showm.scene.azimuth(0.05 * cnt)
+    scene.add(tb)
     scene.camera_info()
-    if (cnt % 1 == 0):
-        showm.scene.rm_all()
-        #lines = [np.array([[-500.,-800.,-500.],[500.,-800.,-500.],[500.,800.,-500.],[-500.,800.,-500.],[-500.,-800.,-500.],[-500.,-800.,500.],[-500.,800.,500.],[-500.,800.,-500.],[-500.,800.,500.],[500.,800.,500.],[500.,-800.,500.],[500.,-800.,-500.],[500.,800.,-500.]])]
-        colors = np.random.rand(1,3)
-        c = actor.line(lines, colors)
-        scene.add(c)
-        scene.add(tb)
-        showm.scene.add(SphereActor_list[cnt])
-        outname="viz_timer"+str(cnt)+".png"
-        x_label = actor.text_3d(text='x axis (micron)',position=(-100,-900,550),font_size=50,justification='left')
-        scene.add(x_label)
-        y_label = actor.text_3d(text='y axis (micron)',position=(-900,0,550),font_size=50,justification='left')
-        scene.add(y_label)
-        z_label = actor.text_3d(text='z axis (micron)',position=(600,-900,0),font_size=50,justification='left')
-        scene.add(z_label)
-#        window.record(showm.scene, size=(1080, 720), out_path=outname)
-        
-
     showm.render()
     if cnt == maxcnt:
         showm.exit()
 
 
+line_slider = ui.LineSlider2D(center=(500, 250), initial_value=0,
+                              min_value=0, max_value=37,text_template="{value:.0f}")
 
+line_slider.on_change = line_slider_value
+showm.scene.add(line_slider)
 
 # Run every 200 milliseconds
 showm.add_timer_callback(True, 200, timer_callback)
