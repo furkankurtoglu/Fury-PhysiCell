@@ -231,7 +231,7 @@ def timer_callback(_obj, _event):
     global current_Timepoint, Timepoint, c
     cnt = next(counter)
     maxcnt = 1000
-    Logic_check = (current_Timepoint != Timepoint)
+    Logic_check = (current_Timepoint == Timepoint)
     current_Timepoint = Timepoint
     tb.message = "Time Point : " + str(Timepoint)+ " hrs"
     scene.add(tb)
