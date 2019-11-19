@@ -225,18 +225,18 @@ line_slider = ui.LineSlider2D(center=(200, 250), initial_value=1,
 line_slider.on_change = line_slider_value
 showm.scene.add(line_slider)
 
-
+current_Timepoint = 1
 
 def timer_callback(_obj, _event):
+    global current_Timepoint, Timepoint, c
     cnt = next(counter)
-    maxcnt = 600
+    maxcnt = 1000
+    Logic_check = (current_Timepoint != Timepoint)
     current_Timepoint = Timepoint
     tb.message = "Time Point : " + str(Timepoint)+ " hrs"
     scene.add(tb)
-    scene.add(Sphere_Actor_List[Timepoint])
     #scene.camera_info()
-    showm.render()
-    if (current_Timepoint != Timepoint):
+    if (Logic_check == False):
         window.rm_all(scene)
         scene.add(Sphere_Actor_List[Timepoint])
         x_label = actor.text_3d(text='x axis (micron)',position=(-100,-900,550),font_size=50,justification='left')
@@ -245,13 +245,14 @@ def timer_callback(_obj, _event):
         scene.add(y_label)
         z_label = actor.text_3d(text='z axis (micron)',position=(600,-900,0),font_size=50,justification='left')
         scene.add(z_label)
+        scene.add(c)
         current_Timepoint = Timepoint
         showm.scene.add(line_slider)
         print('Slider Changed')
         scene.add(tb)
     if cnt == maxcnt:
         showm.exit()
-
+    showm.render()
 
 
 # Run every 200 milliseconds
