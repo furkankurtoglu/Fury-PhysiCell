@@ -6,8 +6,10 @@ Created on Tue Dec 17 16:27:17 2019
 """
 
 from pyMCDS import pyMCDS
+import scipy.io as sio
 
 mcds = pyMCDS('output00000070.xml')
+me = sio.loadmat('output00000070_microenvironment0.mat')
 #%%
 xx, yy, zz = mcds.get_mesh()
 glu=mcds.data['continuum_variables']['glucose']['data']
@@ -51,7 +53,7 @@ with open("PhysiCell3D_mesh.csv", 'w') as f:
     counter = 0
     f.write('xdim,ydim,zdim,glu')
     f.write('\n')
-    for i in range(0,xdim):
+    for i in range(0,70):
         for j in range(0,ydim):
             for k in range(0,zdim):
                 f.write(str(A[0][counter]))
