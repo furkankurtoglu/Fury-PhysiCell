@@ -7,7 +7,7 @@ Created on Tue Dec 17 16:27:17 2019
 
 from pyMCDS import pyMCDS
 
-mcds = pyMCDS('output00000062.xml')
+mcds = pyMCDS('output00000070.xml')
 #%%
 xx, yy, zz = mcds.get_mesh()
 glu=mcds.data['continuum_variables']['glucose']['data']
