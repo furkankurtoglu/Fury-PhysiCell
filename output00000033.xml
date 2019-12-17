@@ -11,9 +11,9 @@
 		</software>
 		<citation />
 		<current_time units="min">1980.000000</current_time>
-		<current_runtime units="sec">1775.926216</current_runtime>
-		<created>2019-09-17T07:36:42Z</created>
-		<last_modified>2019-09-17T07:36:42Z</last_modified>
+		<current_runtime units="sec">1775.447962</current_runtime>
+		<created>2019-08-21T14:16:27Z</created>
+		<last_modified>2019-08-21T14:16:27Z</last_modified>
 	</metadata>
 	<microenvironment>
 		<domain name="microenvironment">
@@ -37,22 +37,22 @@
 				<variable name="glucose" units="concentration" ID="1">
 					<physical_parameter_set>
 						<conditions />
-						<diffusion_coefficient units="micron^2/min">30000.000000</diffusion_coefficient>
-						<decay_rate units="1/min">0.000100</decay_rate>
+						<diffusion_coefficient units="micron^2/min">1600.000000</diffusion_coefficient>
+						<decay_rate units="1/min">0.000000</decay_rate>
 					</physical_parameter_set>
 				</variable>
 				<variable name="lactate" units="concentration" ID="2">
 					<physical_parameter_set>
 						<conditions />
-						<diffusion_coefficient units="micron^2/min">39000.000000</diffusion_coefficient>
-						<decay_rate units="1/min">0.000100</decay_rate>
+						<diffusion_coefficient units="micron^2/min">1600.000000</diffusion_coefficient>
+						<decay_rate units="1/min">0.000000</decay_rate>
 					</physical_parameter_set>
 				</variable>
 				<variable name="glutamine" units="concentration" ID="3">
 					<physical_parameter_set>
 						<conditions />
-						<diffusion_coefficient units="micron^2/min">16111.000000</diffusion_coefficient>
-						<decay_rate units="1/min">0.000100</decay_rate>
+						<diffusion_coefficient units="micron^2/min">1600.000000</diffusion_coefficient>
+						<decay_rate units="1/min">0.000000</decay_rate>
 					</physical_parameter_set>
 				</variable>
 			</variables>

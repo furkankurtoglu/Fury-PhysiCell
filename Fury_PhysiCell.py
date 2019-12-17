@@ -220,7 +220,7 @@ scene.add(z_label)
 
 
 line_slider = ui.LineSlider2D(center=(200, 250), initial_value=1,
-                              min_value=0, max_value=37,text_template="{value:.0f}")
+                              min_value=0, max_value=71,text_template="{value:.0f}")
 
 line_slider.on_change = line_slider_value
 showm.scene.add(line_slider)
@@ -230,7 +230,7 @@ current_Timepoint = 1
 def timer_callback(_obj, _event):
     global current_Timepoint, Timepoint, c
     cnt = next(counter)
-    maxcnt = 1000
+    maxcnt = 10000
     Logic_check = (current_Timepoint == Timepoint)
     current_Timepoint = Timepoint
     tb.message = "Time Point : " + str(Timepoint)+ " hrs"
