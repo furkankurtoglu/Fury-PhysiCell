@@ -53,7 +53,7 @@ with open("PhysiCell3D_mesh.csv", 'w') as f:
     counter = 0
     f.write('xdim,ydim,zdim,glu')
     f.write('\n')
-    for i in range(0,70):
+    for i in range(0,80):
         for j in range(0,ydim):
             for k in range(0,zdim):
                 f.write(str(A[0][counter]))
