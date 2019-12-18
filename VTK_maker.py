@@ -10,12 +10,15 @@ import scipy.io as sio
 
 mcds = pyMCDS('output00000070.xml')
 me = sio.loadmat('output00000070_microenvironment0.mat')
-#%%
-xx, yy, zz = mcds.get_mesh()
-glu=mcds.data['continuum_variables']['glucose']['data']
-xdim= glu[:][0][0].size
-ydim= glu[0][:][0].size
-zdim= glu[0][0][:].size
+me = me['multiscale_microenvironment']
+
+xdim= me[0][:]
+ydim= me[1][:]
+zdim= me[2][:]
+oxygen = me[4][:]
+glucose = me[5][:]
+lactate = me[6][:]
+glutamine = me[7][:]
 
 
 #%%
@@ -50,19 +53,20 @@ with open("PhysiCell3D_mesh.csv", 'w') as f:
 #        f.write(' ')
 #    f.write('\n')
 #    f.write('SCALARS scalar_variable float 1')
-    counter = 0
-    f.write('xdim,ydim,zdim,glu')
+    f.write('xdim,ydim,zdim,oxygen,glucose,lactate,glutamine')
     f.write('\n')
-    for i in range(0,80):
-        for j in range(0,ydim):
-            for k in range(0,zdim):
-                f.write(str(A[0][counter]))
-                f.write(',')
-                f.write(str(A[1][counter]))
-                f.write(',')
-                f.write(str(A[2][counter]))
-                f.write(',')
-                f.write(str(glu[i][j][k]))
-                counter += 1
-                print(counter)
-                f.write('\n')
+    for i in range(len(glucose)):
+        f.write(str(xdim[i]))
+        f.write(',')
+        f.write(str(ydim[i]))
+        f.write(',')
+        f.write(str(zdim[i]))
+        f.write(',')
+        f.write(str(oxygen[i]))
+        f.write(',')
+        f.write(str(glucose[i]))
+        f.write(',')
+        f.write(str(lactate[i]))
+        f.write(',')
+        f.write(str(glutamine[i]))
+        f.write('\n')
